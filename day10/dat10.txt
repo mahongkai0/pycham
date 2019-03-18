@@ -1,0 +1,36 @@
+
+2 AJAX
+    1..什么是AJAX
+        使用 js 异步的向服务器发送请求并接受响应
+    2. AJAX的核心对象
+        XMLHttpRequest
+        ActiveXObject
+
+        创建核心对象：
+            if（window.XMLHttpRequest）{
+                return new XMLHttpRequest
+            }else{
+            return new ActiveXObeject（”Microsoft.XMLHTTP“）
+
+           }
+
+
+    4.使用 ajax 发送get请求
+        1.创建xhr
+        2.创建请求
+        3.设置回调函数
+        4.发送请求
+
+
+
+
+1.使用ajax发送post请求
+    1.请求数据放在 send（） 当中
+        xhr.send("name=value&name=value")
+    2. 更改请求消息头
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+
+
+
+

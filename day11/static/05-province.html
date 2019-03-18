@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-1.11.3.js"></script>
+    <script>
+        <!--// 加载所有省份信息-->
+        function loadPro(){
+            $.ajax({
+               url:'/05-province',
+               type:'get',
+               dataType:'json',
+               async:false,
+               success:function(data){
+                    var html = "";
+                    for(var i=0;i<data.length;i++){
+                        var pro = data[i];
+                        html += "<option value='"+pro.id+"'>";
+                        html += pro.pname;
+                        html += "</option>"
+                    };
+                    $("#selPro").html(html);
+               }
+            });
+        };
+        <!--//根据省份id查询相应的城市信息并加载-->
+        <!--//param pid: 要加载城市所对应的省份id-->
+        function loadCity(pid){
+            $.ajax({
+                url:'/05-city',
+                type:'get',
+                data:'pid='+pid,
+                dataType:"json",
+                success:function(data){
+                    var html = "";
+                    for(var i=0;i<data.length;i++) {
+                        var city = data[i];
+                        html += "<option value='" + city.id + "'>";
+                        html += city.cname;
+                        html += "</option>"
+                    }
+                    $("#selCity").html(html);
+                }
+            });
+        }
+        $(function(){
+            loadPro();
+            loadCity($("#selPro").val());
+            $("#selPro").change(function(){
+                loadCity(this.value);
+            });
+        });
+    </script>
+</head>
+<body>
+    <select id="selPro"></select>
+    <select id="selCity"></select>
+</body>
+</html>

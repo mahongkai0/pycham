@@ -1,0 +1,206 @@
+1.搭建结构
+    from flask import Flask
+    app= Flask（__name__）
+    @app.route('/')
+    def f（）：
+        return “xxx”
+    if __name__="__main__":
+        app.run(debug=True)
+2.路由
+    1.带参数路由
+    @app.route（‘/index/<param>’）
+    def index((param):
+        #para路由中的<param>的值
+        return ”“
+
+    @app.route('index/<param>/<param2>')
+        return xxx
+    反向解析
+    url_for=url_for('index')
+
+********************************************************************************
+
+CTRL +AT +  L  格式化文件
+1.模板-Templates
+    1.什么是模板
+        模板就是HTML网页
+        模板中允许包含”占位变量“来表示动态的显示内容
+        模板最终也会被解析成字符串响应给客户端
+
+        Flask中的模板时依赖于Jinja2的模板系统
+        http://jinja.pocoo.org/********************************************************************
+    2.模板的设置
+        默认情况下 Flask 会在项目录中的一个叫做templates的子目录取搜索模板 ********************************
+    3.模板的渲染
+        作用： 将网页呈现在浏览器中
+        语法：
+        from flask import render_template
+        return render_template('01-temp.html')
+   练习
+    去往Blog
+    将/，/login /regoster  /list  /info的响应内容变为模板的渲染
+    1.将Blog_finally 中的html文件 放到Blog项目的templates 目录中
+    2.对应的访问路径要渲染对应的模板文件
+        /：index.html
+        /login：login.html
+        /register：register.html
+        /list：list.html
+        /info： info.html
+
+
+
+    4.模板中的语法（重点）
+        1.变量
+        作用： 在模板中 变量是一个占位符 目的是为了告诉模板
+            引擎，该位置的值是在渲染时的哪个变量中读取出来的
+            语法：
+                视图中：声明变量
+                    @app.route（‘/’）
+                    def index（）：
+                        return render_template('xxx.html',变量1=值1，变量2=值2，....)
+                        return
+                        render_template('01-temp.html',name='lvze',age=20)
+                        模板中：显示变量
+                        {{变量名}}
+                                eg   <h1>{{name}}</h1>
+
+                模板中：显示变量
+练习
+1.创建路由（/02-var）一级对应的视图
+2.渲染02-var.html 并显示一下内容
+书名：《钢铁是咋炼成的》
+作者：李白
+出版社：北京大学出版社
+出版时间：165-12-12
+
+        2.过滤器 filters
+            1，什么是过滤器
+                过滤器允许在变量输出之前改变变量的值
+            2.语法
+                {{变量|过滤器}}
+                {{变量|过滤器（参数）}}
+            ex  文档中 abs(number)
+                   模板中{{salary|abs}}
+                    说明： salary 就是abs（）中的参数
+
+                过滤器             作用
+                   capitalize       首字符变大写
+                   lower            所有字符变小写
+                   upper            所有字符变大写
+                   title            每个单词首字符变大写
+                    trim            去掉文本两端的空格
+                    default         如果变量为空 则显示指定默认值
+                    truncate            如果字符串超出指定长度则截取字符串
+
+
+            3.标签    -控制结构
+                1.什么是标签
+                    每个标签表示的都是不同的服务器端功能
+                2.语法
+                    {% 标签内容 %}
+                    {% 结束标签 %}（部分标签有结束）
+
+                3. 常用标签
+                    1.for
+                        {% for 变量 in 可迭代元素 %}
+                            <h2>{{变量}}</h2>
+                        {% endfor %}
+
+                        2.内置变量
+                            1.作用：
+                                在for 循环中 无需声明直接使用
+                                表示本次循环的一些相关信息
+                             2，常用属性
+                                1.loop.index.
+                                    作用：表示当前循环的次数，从1开始记录
+                                2.loop。index0
+                                    作用：同上，但从0开始
+                                3。loop.first
+                                    作用：表示是否为第一次循环 如果第一次循环则为True
+                                4， loop.last
+                                    作用：表示是否为最后一次循环
+                                        最后一次循环则为True
+
+                    2.if
+                        1.基本的if标签
+                            {% if 条件 %}
+                                满足条件时要运行的内容
+                            {% endif %}
+                        2.if ... else  结构
+                            {% if 条件 %}
+                                满足条件时要运行的内容
+                            {% else %}
+                                不满足条件时要运行的内容
+                             {% endif %}
+                        3. if ...elif ... else 结构
+                            {% if 条件1 %}
+                                满足条件1时运行的内容
+                            {% elif 条件2 %}
+                                满足条件2时运行的内容
+                            {% else %}
+                                两个条件都不满足时执行的内容
+                            {% endif %}
+                    3.macro-宏
+                        1.作用
+                            相当于在模板中声明函数
+                        2.语法
+                            使用  {% macro %}...{% endmacro %}
+
+                            声明
+                                  {% macro 名称（参数）%}
+                                    xxx
+                                  {% endmacro %}
+                                 调用
+                                 {{名称（参数）}}
+                           3.在独立的文件中声明宏
+                                实际开发中 推荐将宏放在统一的文件中进行管理
+                                1.创建 macro.html  模板文件
+                                    该文件中只声明宏
+                                2.使用宏文件
+                                    1.导入宏文件
+                                        {% import 'macro.html' as macros %}
+                                       2.调用宏
+                                       {{名称（参数）}}
+
+                4.静态文件
+                1.什么是静态文件
+                    不能与服务器做动态交互的文件都是静态文件
+                    （css，js，图片，音视频，。。。）
+                2.静态文件的处理
+                    1.在项目工程目录中创建static 文件夹
+                        作用：为了存放所有的静态文件
+                    2.所有的静态文件必须通过 /static/ 路径访问
+                        /static ： 表示  static 后的子路径将到staic文件夹中继续搜素
+            作业：
+        1.完善blog项目的静态内容
+        2.将blog中对应的模板中的静态内容设置好
+            1.创建static 目录
+            2.将images，css，js分别copy到static目录中
+            3.修改模板的源文件，将文件访问地址更新为静态地址
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

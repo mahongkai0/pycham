@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        <!--用于删除指定用户的信息-->
+        function delUser(id){
+        if(confirm("确认要删除id为"+id+"的用户吗"))
+            location.href='/14-delete?id='+id;
+        }
+
+    </script>
+</head>
+<body>
+    <table width="500" border="1">
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>邮箱</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td>{{u.username}}</td>
+            <td>{{u.age}}</td>
+            <td>{{u.email}}</td>
+            <td>
+                {% if u.isActive %}
+                激活
+                {% else %}
+                未激活
+                {% endif %}
+            </td>
+
+      <td><a href="javascript:delUser({{u.id}})">删除</a>
+          <a href="/15-update?id={{u.id}}">修改</a></td>
+
+        </tr>
+
+        {% endfor %}
+
+        <tr>
+            <td><a href="/10-page?page=1">首页</a></td>
+             <td><a href="/10-page?page={{prePage}}">上一页</a></td>
+             <td><a href="/10-page?page={{nextPage}}">下一页</a></td>
+             <td><a href="/10-page?page={{lastPage}}">尾页</a></td>
+
+        </tr>
+
+
+
+    </table>
+</body>
+</html>

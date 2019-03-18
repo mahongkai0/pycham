@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/06-post" method="post">
+        <p>
+            姓名: <input type="type" name="uname">
+        </p>
+        <p>
+            年龄: <input type="number" name="uage">
+        </p>
+        <p>
+
+            <input type="submit" value="提交">
+            <input type="button" value="Js提交" onclick="btnClick()">
+        </p>
+
+        <script>
+            function btnClick(){
+                var uname = document.getElementsByName("uname")[0].value
+                var uage= document.getElementsByName("uage")[0].value
+                var url="/05-get?uname="+uname+"&uage="+uage
+                    location.href=url;
+
+            }
+
+        </script>
+
+    </form>
+
+
+
+
+</body>
+</html>

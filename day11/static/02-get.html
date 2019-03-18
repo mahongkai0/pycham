@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-1.11.3.js"></script>
+    <script>
+        $(function(){
+            $('#btnShow').click(function(){
+            <!--var data = "uname=maria"-->
+            <!--var data={-->
+                <!--uname:"maria"-->
+            <!--}-->
+
+            $.get("/02-get","uname=maria",function(resText){
+                <!--由于在$.get方法的第四个参数位置指定响应回来的数据是json格式-->
+                <!--则不需要手动转换js对象  一切转换由jquery完成-->
+
+                for(var i=0;i<resText.length;i++){
+                    var u = resText[i]
+                    console.log("id:"+u.id+" "+"用户名:"+u.uname)
+                }
+
+
+        },"json")
+
+
+        });
+
+        })
+
+    </script>
+</head>
+<body>
+    <button id="btnShow">显示</button>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function loadTeacher(id){
+        <!--alert("课程id为:"+id)-->
+        <!--//构建请求地址-->
+        var url ="/18-query"
+        <!--//如果id的值大于0的话则拼接url的后面 -->
+        if(id>0){
+            url +="?id="+id
+
+        }
+        location.href=url
+       }
+    </script>
+</head>
+<body>
+    <select onchange="loadTeacher(this.value)">
+        <option value="0">全部</option>
+        {% for course in courses %}
+        <option value="{{course.id}}" {% if course.id == id %}selected{% endif %}>{{course.cname}}</option>
+        {% endfor %}
+         </select>
+        <table width="300" border="1">
+            <tr>
+                <td>姓名</td>
+                <td>年龄</td>
+                <td>状态</td>
+            </tr>
+            {% for tea in teachers %}
+            <tr>
+                <td>{{tea.tname}}</td>
+                <td>{{tea.tage}}</td>
+                <td>
+                    {% if tea.isActive %}
+                    激活
+                    {% else %}
+                    未激活
+                    {% endif %}
+                </td>
+            </tr>
+
+
+            {% endfor %}
+        </table>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

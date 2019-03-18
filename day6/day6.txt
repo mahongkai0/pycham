@@ -1,0 +1,249 @@
+2.flask-migrate
+包： flask_mgrate
+类：
+    1.Migrate
+    2.MigrateCommand
+
+3.通过 manager 管理项目并做数据库迁移
+manger=Manager（app）
+migrate=Migrate（app，db）
+manager.add_command('db',MigrateCommand)
+
+4.迁移指令
+三次：
+
+2.基于OPM的CRUD
+1.保存数据
+    db.session.add(实体对象)
+    db.session，。commit（）
+2.设置自动提交命令
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']=true
+
+2.查询数据
+    1.基于 db。session 查询
+        1.db。session。query（）
+            参数： 要查询实体类或实体类的属性
+            返回值：BaseQuery
+    2.基于实体类查询
+
+
+
+************************************************************************************************************
+1.查询 ORM（Retrieve）
+    1.查询过滤器函数
+    1.filter（）
+    1.查询年龄大于17岁的人的信息
+        db。session。query（Users）.filter(Users.age>17).all()
+    2.查询年龄大于17并且id》1的
+        1.方案1
+            db.session,query(Users).filter(Users.age>17).fileter(Users.id>1).all()
+        2.方案2
+            使用 ，
+             连接多个查询条件-and
+             db.session.query(Users).filter(Users.age>17,Users.id>1).all()
+        3.查询年龄大于17或者id大于1的人的信息
+            from sqlalchemy import or_
+            db.session.query(Users).fileter(Users.age>17,Users.id>1).all()
+        4.查询id=1的用户的信息
+        db。session。query（Users）.filter(Users.id==1).first()
+
+        5.查询 emial中包含 maria的人的信息
+        email中包含maria
+        sql： select * from Users where email like '%maria%'
+
+        注意：模糊查询like 可以借助实体类提供的like（）查询
+
+        db.session.query（Users）.fileter(Users.email.like('%马瑞亚%'))
+
+        6.模糊查询 - in
+            模糊查询in需要使用实体类属性提供的in_(‘’，‘’)
+            示例：
+                查询年龄是31 20 16的users的信息
+            db.session.query(Users).filter(Users.age.in_(31,20,16)).all()
+        7.模糊查询 -between and
+        模糊查询between and 需要使用实体类属性提供的between（值1，值2）完成查询
+        示例： 查询年龄30-45
+            db.session.query(Users).filter(Users.age.between(30,45)).all()
+
+    2.filter_by()
+        作用：只能做单表的等值条件过滤筛选
+        语法：
+            db.session.query(Users).filter_by(属性=值).all()
+        注意：  等值使用一个
+                条件构建时不使用实体类
+
+
+        lianxi
+        使用 filter_by查询 Users 中 isActive为True的用户的信息
+        db.session.query(Users).filter_by(isActive=True).all()
+
+    3.limit() & offset()
+        sql:
+            #获取users中前5条数据
+            select * from users limit 5
+            #获取users表中跳过前3条再取前5条
+            select * from users limit 3,5
+
+         1. limit(n)
+         作用：获取前n行的数据
+            eg：
+                db.session.query（Users）.limit（5）.all（）
+         2. offset（n）
+           作用:从查询结果中跳过前5条再取前三条
+           eg:
+           db.session.query(Users).offset(5).limit(3).all()
+
+
+    4.order_by
+    作用 排序
+    示例：
+        1.users表中按照年龄做降序排序
+        db.session.query(Users).order_by("age desc").all()
+        2.user表中按照年龄降序排序 二级排序按照id升序排序
+            db.session.query(Users).order_by("age desc,id").all()
+
+    2.聚合查询
+        1.基本的聚合查询
+                #func 提供的所有的聚合函数
+            form sqlalchemy import func
+                func.sum（）： 求和
+                func.count（）： 求数量
+                func.max() ；求最大值
+                func.min();求最小值
+                func.avg()  求平均值
+                db.session.query(func.聚合函数（实体。属性）).all（）
+        2.分组的聚合查询
+            db.sesson.query(聚合).group_by('属性名').all（）
+        3.带条件的分组聚合
+        select isActive,count(*) from users where age>25 group_by having count(*)>2
+
+        db.session.query(查询列，聚合列).filter（条件）.group_by('分组').having（条件）
+                                            映射where   映射group by    映射 分组后的组内筛选having
+
+        db.session。query（isActive,func.count('*')).filter(Users.age>25)
+                .group_by('isActive').having(func.coubnt('*')>2)
+
+
+#1.查询users表中所有人的总年龄
+db.session.query(func.sum(User.age)).all()
+db.session.query(func.sum(Users.age))
+
+#2.查询users表中总人数是多少
+db.session.query(func.count('*'))
+db.session.query(func.count("*"))
+
+
+
+#3.查询users表中所有人的平均年龄
+db.session.query(func.avg(User.age))
+db.session.query(func.avg(Users.age))
+
+#4.查询users表中年龄大于18岁的人的平均年龄是多少
+db.session.query(func.avg(Users.age)).filter(Users.age>18)
+
+
+db.session.query(func.avg(Users.age)).filter(Users.age > 18)
+
+#5.查询users表中按isActive分组后每组人数
+db.session.query(func.count("*")).group_by("isActive")
+
+db.session.query(func.count("*")).group_by("isActive")
+
+
+
+#6.查询users表中按isActive分组后,组内人数大于2人的组的 组名 和 人数
+
+
+db.session.query(Users.isActive,func.count('*')）.group_by('isActive'),having(func.count("*")>2)
+
+
+
+
+db.session.query(Users.isActive,func.count("*")).group_by("isActive").having(func.count("*") > 2)
+
+
+#7.查询users表中年龄大于25岁的人按isActive分组,组内人数大于2人的组名 和 人数
+        db.session.query(Users.isActive,func.count('*')).filter(Users.age>25).group_by.('isActive').
+        .having(func.count('*'))
+
+
+
+
+
+        db.session.query(Users.isActive,func.count("*"))
+            .filter(Users.age>25)
+            .group_by("isActive")
+            .having(func.count("*") > 2)
+
+3.基于实体类的查询
+    实体类 .query 查询过滤器函数（）。查询执行函数（）
+    示例：
+    1.查询 users 表中所有的数据
+        Users.query.all（）
+    2查询users表中 isActive为True的人的信息
+        Users.query().filter(Users.isActive==True).all()
+        如果用filter_by
+        Users.query().filter_by(isActive=True).all()
+
+
+2.ORM -修改 Update
+    1.查
+        查询出要修改的实体对象
+    2.改‘
+        通过实体对象。属性=值
+    3.保存
+        db。session.add(实体对象)
+
+     user=Users.query.filter_by(id=4).first()
+    #再将其age 改为31
+    user.age=31
+    db.session.add(user)
+    db.session.commit()
+
+
+
+
+
+
+3.ORM-删除Delete
+    1.查询
+        查询出锁
+    2.删除
+
+
+    #查询id为4的用户的信息
+    user=Users.query.filter_by(id=7).first()
+    #删除该信息
+    db.session.delete(user)
+    db.session.commit()
+
+
+
+1.点击删除时 弹出个提示框
+window。confirm() 询问是否删除 确认删除则删除
+点击修改时将要修改的人的信息显示在15-update.html 上
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

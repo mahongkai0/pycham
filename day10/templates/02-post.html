@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-1.11.3.js"></script>
+    <script src="/static/js/commin.js"></script>
+    <script>
+        $(function(){
+            $("#btnSend").click(function(){
+
+                var xhr = createXhr();
+                var url = "/02-post"
+                xhr.open("post",url,true);
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState==4&&xhr.status==200){
+                        $("#uname-tip").html(xhr.responseText);
+                    }
+                }
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                var data = "uname="+$("#uname").val();
+                xhr.send(data);
+            });
+        });
+    </script>
+</head>
+<body>
+    <p>
+        姓名:<input type="text" id="uname">
+        <button id="btnSend">发送</button>
+    </p>
+    <p id="uname-tip"></p>
+</body>
+</html>

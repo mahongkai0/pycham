@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--声明一个宏 showP
+该宏会接受一个参数 并以P标记的方式显示接受的值
+
+-->
+{% macro showP(str) %}
+<p style="font-size:24px,color:#369;">
+
+    {{str}}
+</p>
+{% endmacro %}
+
+{% for name in list %}
+    {{ showP(name) }}
+{% endfor %}
+
+    <!--使用 macro.html 中的 showList-->
+    {% import 'macro.html' as macros %}
+    <div>
+        {{ macros.showList(list) }}
+    </div>
+
+</body>
+</html>

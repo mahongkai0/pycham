@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+      <script src="/static/js/jquery-1.11.3.js"></script>
+    <script>
+        $(function(){
+            $("#btnShow").click(function(){
+            $.ajax({
+            url:"/04-ajax",
+            type:"get",
+            dataType:"json",
+            async:true,             <!--atrue  和 get 为默认值 都可以i省略-->
+            success:function(data){
+            for(var i=0;i<data.length;i++){
+            console.log("用户名:"+data[i].uname+"昵称:"+data[i].nickname)
+            }
+
+
+            }
+
+            })
+
+            });
+
+        })
+
+    </script>
+</head>
+<body>
+    <button id="btnShow">显示</button>
+</body>
+</html>

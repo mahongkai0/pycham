@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    li{
+        list-style:none;
+    }
+    #sha{
+        border-radius:30px;
+    }
+
+</style>
+<form action="/02-lianxi" method="post" enctype="multipart/form-data">
+    <li>
+    <h2>标题：
+        <input type="text" name="title">
+    </h2>
+    </li>
+    <li>
+        <h2>类型：
+            <input type="radio" name="type" value="1">个人博客
+            <input type="radio" name="type" value="2">公开博客
+        </h2>
+    </li>
+    <li>
+        <h2>内容：<textarea id = "duo" name="content" cols="70" rows="10"></textarea></h2>
+
+    </li>
+    <li>
+        <h2>
+            图片：<input type="file" name="picture">
+        </h2>
+    </li>
+    <li>
+        <input id="sha" type="submit" value="发布">
+    </li>
+
+
+</form>
+
+
+
+
+</body>
+</html>

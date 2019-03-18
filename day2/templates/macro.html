@@ -1,0 +1,23 @@
+
+    <!--传递一个列表解析成ul 显示在网页中-->
+
+
+    {% macro showList(list) %}
+        <ul>
+        {% for str in list %}
+            <li
+            {% if loop.index % 2 == 0 %}
+                style="background:red"
+            {% else %}
+                style="background:yellow"
+            {% endif %}
+
+            >{{str}}</li>
+
+        {% endfor %}
+
+    </ul>
+
+ {% endmacro %}
+
+

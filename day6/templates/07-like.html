@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/07-query_like_exer">
+        姓名:<input type="text" name="uname"  value="{{ uname }}">
+        <input type="submit" value="查询">
+    </form>
+    <table border="1" width="400">
+        <tr>
+            <td>姓名</td>
+            <td>年龄</td>
+            <td>邮箱</td>
+        </tr>
+        {% for u in users %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>{{ u.age }}</td>
+                <td>{{ u.email }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

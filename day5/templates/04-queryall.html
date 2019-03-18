@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>邮箱</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    </tbady>
+        <tbady>
+            {% for user in users %}
+                <tr>
+                    <td>{{user.username}}</td>
+                    <td>{{user.age}}</td>
+                    <td>{{user.email}}</td>
+                    <td>
+                        {% if user.isActive %}
+                            激活
+                        {% else %}
+                            非激活
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        <a href="#">删除</a>
+                        <a href="#">修改</a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+
+
+
+    </thead>
+
+
+</table>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-1.11.3.js"></script>
+    <script>
+
+        function print_msg(data){
+        $('#show').html("<h1>"+data+"</h1>")
+        }
+
+
+
+        $(function(){
+        <!--$('#btnShow').click(function(){-->
+            <!--$.get("http://127.0.0.1:5000/06-cross",function(data){-->
+            <!--$('#show').html(data)-->
+            <!--})-->
+        <!--});-->
+
+        $('#btnShow').click(function(){
+               <!--动态创建一对script标记，用于完成js的请求-->
+                var script = document.createElement("script")
+                <!--为script元素标记的type属性赋值-->
+                script.type = "text/javascript"
+                <!--指定script元素的请求地址 通过src属性指定-->
+                script.src = "http://127.0.0.1:5000/06-cross",
+                <!--&lt;!&ndash;将script加载到DOM树上，加到DOM树上的目的是为了向src 的地址发送请求-->
+                <!--同时接受响应数据，响应数据直接交给了浏览器，由浏览器当成js脚本去执行&ndash;&gt;-->
+                body= $("body")[0]
+                body.append(script)
+
+
+            });
+
+        })
+
+
+    </script>
+</head>
+<body>
+    <button id="btnShow">显示</button>
+    <div id="show"></div>
+</body>
+</html>

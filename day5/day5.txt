@@ -1,0 +1,242 @@
+1.文件上传
+    1.准备工作
+        1.表单必须用post
+        2，表单的enctype的值必须为multipart/form-data
+    2.服务器端
+        1.获取上传文件
+            request.files【‘名称’】
+            f.filename： 得到文件的名称
+            f.save（）  保存文件
+
+
+ 2.模型
+    1.什么是模型
+        根据数据表结构而创建出来的类
+        能够实现对数据的CRUD操纵
+    2.模型框架-ORM
+        python 的ORM框架 ：SQLAlchemy
+        Flask：  flask-sqlalchemy 插件bao
+    3.Flask 配置数据库
+        app.cofing['SQLALCHEMY_DATABASE_URL']="mysql+pymysql：//usename：password@host：port/dbname"
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 取消信号连接
+
+        创建数据库的实例
+            db=SQLAlchemy（app）
+
+    4，创建模型类（实体类）
+    语法：
+        class CLASSNAME(db.Model)：
+            __tablename__=“名字''
+              列名=db.Column(db.Type,OPTOS)
+*********************************************************************************************
+1.数据库迁移                                                         runserver --host 127.0.0.1 --port 5000
+    1.什么是数据库迁移                                      create database ajax default charset=utf8 collate utf8_general_ci
+        将实体类的改动再映射回数据库
+    2.依赖两个第三方库
+        1.模块名：flask-script
+        安装：  sudo pip3 install flask-script
+            提供对项目进行管理的脚本指令
+             导入   包  flask_script
+                类 Manager
+        2.flask-migrate
+            安装  pip install flask-migrate
+            作用：提供有关数据迁移的指令
+            包： flask_migrate
+
+            类：
+                1.Migrate
+                    作用：协调app  和db 之间的关系
+                2. MigrateCommand
+                    作用： 提供了在终端中做数据库迁移的指令
+                3.实现数据库的迁移
+                    1.python3 run01.py db init
+                        作用; 做项目和数据库的初始化操作
+                        特点：一个项目中 init只需要执行一次
+                    2. python3 run01.py db migrate
+                        作用： 将编译好的实体类生成中中间文件并保存在migrations 文件夹中
+
+                                特点： 只要检测到实体类有变化 就会生成中间文件
+                      3.python3 run01.py db upgrade
+                        作用： 将中间文件映射为数据库
+
+    lianxi
+    为Blog项目创建数据库以及配置
+        1.创建数据库Blog
+        2.在Blog项目工程中
+            1，将app托管给Manager
+            2.在pycham中做好启动设置
+            reunionserver host 0.0.0.0
+           3.处理Migrate和MigrateCommand
+           为项目增加子命令 db
+           4，初始化db init
+           5.创建 Users 实体类 按照注册页面的需求分析自动断 并同步回数据库
+
+2.基于ORM框架下的CRUD
+    1.增加
+        1.创建实体类对象 并为对象的属性赋值】
+            user =Users（）
+            user.username=‘xxx’
+            user.age=30
+            user.email=‘xxx@163.com’
+       2.将实体对象保存回数据库
+            db.session.add()
+            #非查询操作 默认情况下一定要手动提交事务回数据库
+            db.session。commit()
+        3.配置自动提交操作回数据库
+            app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']=True  这句一写便可以注销手动提交
+    2.查询 -R  retrieve
+        1.基于 db.session 进行查询
+            1. db.session.query()
+                参数： 要查询的实体类以及属性，要查询多个列的话是使用 ，  隔开；如果要查询所有列的话 参数则
+                为实体类名即可
+
+               eg ;
+                1.查询Users 实体类中的id，username，age
+                sql： select id，username，age from users
+                orm： db.session.query(Users.id,Users.usname,Users.age)
+                 2.查询Users实体类中所有的列
+                    db.session.query(Users)
+                  3.查询Users实体类以及Teacher类中所有列
+                  select * from user，teachers
+                  db.session.query(Users,Teachers)
+                 返回值：
+                    返回y一个类型为BaseQuery 的对象
+                   2.查询执行函数‘
+                        1.作用
+                            在db.session.query()基础上得到最终查询结果
+                         2.语法
+                            db.session.query(xxx).查询执行函数（）
+                         3.详解
+                            函数              说明
+                            all()              以列表的方式返回所有数据
+                            first()             返回查询结果的第一条数据  没有结果返回None
+                            first_or_404         效果同上   没有结果则相应404
+                            count()                 返回查询结果的数量
+                    3.查询过滤器函数
+                        1.作用
+                            对查询出的数据进行筛选（条件 限定行 分组 排序）
+                        2.语法
+                            db.session.query(xx).过滤器函数（）.执行函数（）
+                                过滤器函数           说明
+                                filter()              指定查询条件
+                                filter_by()             等值查询条件
+                                limit（）                 查询前几行的数据
+                                offset（）               指定结果偏移量
+                                order_by                    排序
+                                group_by                    分组
+
+                         3.过滤器函数详解
+                            1.filter()
+                                作用：构建各种各样的查新条件
+                                返回值：BaseQuery
+                                注意： 条件必须由    实体类.属性  构成
+                                  db.session.query（User）.fileter（User.age>10）.all()
+                                  1.查询Users实体中 年龄大于30的人的信息
+                                    db.session.query(User).fileter(User)
+
+                            db.session.query（xxx） 返回：BaseQuery 类型
+                             db.session.query（xxx）.filter（） 返回：BaseQuery 类型
+                              db.session.query（xxx）.filter（）.filter（）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

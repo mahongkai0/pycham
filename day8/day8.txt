@@ -1,0 +1,226 @@
+
+1.重定向、
+from flask import redirect
+return redirect('地址')
+2. 一对多映射
+    1，实现
+        1.在多的实体中增加外键
+            外键列名=db.Column(db.Integer,db.ForeignKey('主表.主键'))
+        2.在一实体中增加关联属性和反向引用关系属性
+            关联属性名= db.relationship(
+                             '多的实体类名'，
+                             backref=‘自定义一个反向引用关系属性名’，
+                             lazy='dynamic' （延迟 动态加载的）
+                             )
+    2.使用
+        class Course(db.Model):
+            __tablename__='course'
+            id= db.Column(xxx)
+        class Teacher(db.Model):
+            id= db.Column(xxx)
+            course_id = db.Column（
+
+            ）
+
+
+2.一对一
+    1.什么是一对一
+        A表中的一条数据只能关联到B表中的一条数据
+        B表中的一条数据只能关联到A表中的一条数据
+
+    2. 一对一在数据库中的设置
+        关联的两张表的任意一张表’
+            1，增加外键 引用另一张表的主键
+            2并且要施加唯一约束
+
+    3.在ORM中实现
+        1,。在任意一个实体类中增加外键和唯一约束
+            外键列名= db.Column(
+                db.Integer,
+                db.ForeignKey('主表.主键'),
+                unique=True
+            )
+         2.在另一个实体中增加关联属性和反向引用关系属性
+            属性名 = db.relationship(
+            '关联的实体类',
+            backref='反向引用关系属性名'
+            uselist = False
+
+            )
+            uselist： 设置为False 表示关联属性是一个变量而不是列表
+
+    3.多对多
+    1.什么是多对多、
+        A表中一条数据可以与B表中的多条数据关联
+        B表中一条数据可以与A表中的多条数据关联
+    2.在数据库的实现
+        依靠第三张关联表的方式来实现
+     3.在ORM中
+        1,。创建第三个实体类
+        2.关联属性和反向引用关系属性
+            任意一个类中增加
+            属性名 = db.relationship(
+            "关联的类",
+            secondary='第三张关联表名'，
+            lazy='dynamic'
+            backref='db.backref(
+                '反向引用关系属性名',
+                lazy='dynamic'
+            )'
+            )
+
+
+2.Cookies & Session
+1.什么是Cookies
+    Cook是一个数据存储手段
+    将一段文本保存在客户端（浏览器）的一种手段并可以长时间保存
+ 2. cookies 的使用场合
+    1.记住密码
+    2.用户喜好
+ 3.cookies的特点
+    1.安全性较低
+       明文显示 可以编排
+    2.浏览器会为不同的网站开辟独立的存储空间
+    3.各个浏览器之间的cookies值也不共享
+    4.Flask中使用cookies
+        1.使用响应对象将数据保存cookies
+            1.重定向就是相应对象
+                resp=redirect('/xxx')
+                #resp就是相应对象
+            2. 通过 make_response() 构建响应对象
+
+            from flask import make_response
+            resp = make_response(""或
+            render_template())     render_template()响应对象也是字符串
+
+        2.保存cookies 的语法
+            响应对象.set_cookie(key,value,.ax_age)
+
+            key:保存的cookie的名称
+            value：保存的cookies的值
+            max_age:最大的存活时间 取值为数字
+            以s为单位（不写s）
+
+        2.获取coies的值
+            每次浏览器向服务器发送请求时都会讲本站点下的所有cookies都带到服务器上
+
+            通过 request.cookies 获取所有的cookies值
+
+        3.删除 cookie的值
+            1.     del request.cookies['cookie名称']
+            2.     响应对象.delete_cookie('key')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

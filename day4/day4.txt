@@ -1,0 +1,199 @@
+1.模板的继承
+    1.父模板中
+    {% block 块名 %}
+    {% endblock %}
+    2.子模板中
+        1.指定继承哪个父模板
+            {% extends ‘xxx’%}
+        2，重写、覆盖  父模板的名称
+2.配置
+    1，构建Flask应用的配置
+        app=Flack（
+        __name__,
+        template_folder='xxx'
+        static_url_path='/xx'
+
+            )
+
+        启动服务的配置
+
+         app.run(debug=True，
+                port=555，
+                host='0.0.0.0'  写死
+            )
+
+
+         3.请求的操作 request
+            1。请求对象
+                    -request
+            1.语法
+                from flask import request
+           2. request中的属性
+            1.  。scheme  协议
+            2. 。method    请求方法
+            3.。 args             获取get请求中的数据
+            4   。form       post请求中的数据
+            5   。cookies    获取cookie数据
+            6. 。files   获取上传的文件
+            7  。path        路径 不带参
+            8   。full_path  路径 带参
+            9  .url     完整的请求地址
+            10    。hraders    获取请求消息头
+
+
+  3.请求提交的数据
+    1.get方式
+        request.args【‘name’】
+        request.args.get()
+        request.argsgetlist()
+    2.post方式
+
+
+
+********************************************************
+1.文件上传
+    1.准备工作
+        文件上传一定要在表单中实现
+        1，表单的提交方式必须为post
+        2.表单的enctype属性值为multipart/form-data
+
+    2.服务器端
+        1.通过 request.files 获取上传的文件
+            f = request.files['name']
+        2.通过 f.save（） 将文件保存至指定目录
+            f.save('保存路径')
+            f。save（‘static/'+f.filename）
+                f.filename: 上传文件的名称
+
+2.模型  -Models
+    1.什么是模型
+        模型-根据数据库表结构而创建的类
+    2.模型的相关框架 - ORM框架
+        1.什么是ORM
+            ORM-Object Relationship Mapping
+         中文名： 对象关系映射
+         简称ORM，  O/RM，  O/R Mapping
+
+         将数据和数据之间的关系 在编程中体现出来
+         2.ORM 三大特征
+            1.数据表table 到编程类class 的映射
+            2.。数据类型的 映射
+                将数据表的字段/列以及数据类型 对应到编程语言中的类的属性及其类型
+            3.关系映射
+                将数据库中表与表之间的关系 对应到编程语言中 类与类之间的关系上
+
+
+    3.ORM的优点
+        1.封装了数据中所有的操作 提升开发效率
+        2.可以省略庞大的数据访问层，即使不用SQL编码也能完成CRUD的操作
+            C： Create
+            R:  Retrieve   - 取回
+            U:  Update
+            D:  Delete
+        3.Flask 中的ORM框架
+            1.SQLAlchemy  框架
+            1. 安装SQLALchemy
+                pip3 install sqlalchemy
+            2.Flask中需要使用flask-sqlalchemy 支持包
+                pip3 install flask-sqlalchemy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        2.创建数据库
+            创建一个名为flask的数据库
+            Create database flask default charset=utf8
+            collate utf8_general_ci;
+
+              use flask;
+              show tables;
+        3.在flask 中配置数据库
+           from flask import Flask
+            app=Flask(__name__)
+
+            app.config['SQLALCHEMY_DATABASE_URL']="mysql://用户名:密码@数据库服务地址:端口号/数据库名"
+
+
+             eg:   app.config['SQLALCHEMY_DATABASE_URL']="mysql://root:123456@localhost:3306/flask"
+
+                #创建SQLAlchemy的实例 -db  用于在程序中操作数据库
+           from flask_sqlalchemy import SQLalchemy
+                db = SQLAlchemy(app)
+
+
+
+第一步：from flask import Flask
+第二步：from flask_sqlalchemy import SQLalchemy
+第三步：import pymysql（将其视为mysqldb）
+第四步：pymysql.install_as_MySQLdb()
+第五步：app = Flask(__name__)
+第六步：app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:123456@localhost:3306/flask"  （连接指定数据库）
+第七步：app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  （取消SQLalchemy信号追踪）
+第八步：db = SQLAlchemy(app)  （# 创建数据库应用实例 -db）
+第九步：db.create_all()  （映射）
+
+
+
+
+            URL: Uniform Resource Locator
+                    统一资源定位符
+                URI：Uniform Resource Identifier
+                         统一资源标示符
+
+    4.定义模型（重点）
+            模型：根据数据库中的表结构创建出来的类（模型类，实体类）
+            在SQLAlchemy 中允许通过模型类生成对应的表结构（前提是表结构不存在）
+
+            1.语法
+            class MODELNAME（db.Model）:
+                __tablename__="TABLENAME"
+                COLUMN_NAME=db.Column(do.TYPE,OPTIONS)
+                ...  ...
+               1.MODELNAME
+                定义的模型类的名称 根据表名而设定
+                表名： USERS
+                MODELNAME:Users
+               2.TABLENAME
+               映射到数据库中表名
+                表名：USERS
+                classUsers(db.Model）
+                 __tablename__"USERS"
+                3.COLUMV_NAME
+                属性名，映射到数据库表中就是列名
+                4.TYPE
+                    映射到列的数据类型
+                5， OPTIONS
+                    指定到选项
+
+                db.TYPE 列类型如下
+                           类型名         python类型        说明
+                    Integer                 int             普通整数，32位
+                    SmallInteger            int              小范围整数，16位
+                    BigInteger              int                不限精度范围
+                    Float                   float               浮点数
+                    string                  str                字符串
+                     Text                   str                  字符串
+                     Boolean                bool                 布尔值
+                    Date                    datetime.date           日期类型
+                    Time                    datetime.time             时间类型
+                    DateTime                datetime.datetime          日期时间类型
+             OPTIONS列选项
+             选项名                    说明
+             autoincrement              如果这是这位表该列自增长
+                         注：如果列类型是整数 并且是主键的话 那默认自增长
+
+             primary_key            如果设置为True 表示为主键
+             unique                 如果设置为True 表示该列值为1
+             index                  如果设置为True 表示该列加索引
+             nullable              如果设置为True 表示该列可为空
+              default              设置该列的默认值
+
+               如果一个列中有多个列选项使用   ， 隔开
+
+
+
+
+
+
+
+
+
+
+
+

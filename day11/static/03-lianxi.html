@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+   <script src="/static/js/jquery-1.11.3.js"></script>
+    <script>
+         $(function(){
+
+            $('#uname').keyup(function(){
+                $('#show').html("")
+                if(this.value.length>0){ var data = "uname="+this.value}
+
+
+            $.get("/03-lianxi",data,function(resText){
+                   var html = ""
+
+                for(var i=0;i<resText.length;i++){
+                    var u = resText[i]
+                    html += "<p>"+u.uname+"</p>"
+
+                }
+                $("#show").html(html)
+
+        },"json")
+
+        });
+
+        })
+
+
+
+
+
+
+    </script>
+</head>
+<body>
+
+
+    <div class="">
+        <p>
+            yonghuL <input type="text" id="uname">
+
+        </p>
+        <div id="show"></div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+JSON
+1. 什么是JSON
+    JSON： javaScript Object Notation
+
+2.格式
+    1.JSON可以表示单个数据
+        1.使用 {}表示一个对象
+        2.{} 中使用 key：value  表示数据
+        3.  key 必须使用 “” 引起来
+        4. value 如果是字符串之间的话也必须“”引起来
+        5， 多 key：value 之间使用  隔开
+    2.JSON表示一个数组
+        1.普通字符串
+            使用【】 括起来的字符串们
+        2. 表示多个对象
+            将多个单个对象放下[]
+
+    3. JSonD 的前后端交互
+        1.获取相应的数据
+        2.在后台将数据转换为JSON格式的字符串
+            json.dumps（元祖|列表|字典）
+        3.在后台将数据相应给前端
+        4. 在前段接受相应数据 并转换成JS对象/数组
+         jsOBj= JSON。parse（JSON串）
+
+    4， 实体类的处理
+        class Users(db.Mondel):
+            id= db.Column()
+            uname= db.Column()
+            upwd= db.Column()
+            ....
+            def duct(self):
+                dic={
+                 "id":self.id,
+                 "uname":self.uname,
+                 "upwd":self.upwd,
+                  }
+                return dic
+
+
+
+-----------------------------------------------------------------------------
+1. JQUERY AJAX
+    在 jquery 中提供了对原生ajax的 封装
+
+1. $obj.load(url,data,callback);
+       作用： 加载远超地址的响应数据到$obj 中
+       参数;
+            1.  url
+                    异步请求的地址
+            2. data
+                    要传递给服务器端的参数（可选）
+                    1.以普通字符串作为参数
+                        "key=value&key=value"
+                     2.以json 对象的格式作为参数
+                     {
+                        name1:“value1”
+                        name2：“value2”
+                     }
+                        注意： 如果以该种方式进行传参的话 那么将采用post的方式发送请求
+            3. callback
+                   异步完成后要执行的操作（可选）
+                   function(resText){
+                   resText: 表示响应回来的数据
+                   }
+
+       $.get(url,data,callback,type)
+            作用： 使用get方式向远程地址发送请求
+            语法：
+                1. url 远程请求地址
+                2，data  请求参数
+                        1.字符串
+                        2js对象
+                3，callback 请求成功后的回调函数
+                      function(resText){
+                   resText: 表示响应回来的数据
+                   }
+                4. type ：  响应回来的数据的类型（可选）
+                    1， html ： 响应回来的文本是html文本
+                    2. text      响应回来的文本是普通文本
+                    3， json     响应回来的数据是json格式的
+                    注意： 如果省略不写的话 则等同于html
+       $.post()
+
+ $.ajax(setting)
+    作用： 允许自定义各种请求的参数信息
+    语法： $.ajax({请求参数的js对象})
+        参数对象中的属性：
+            1. url 字符串，表示请求地址
+            2.type： 字符串 请求方式，get 或post
+            3.data：    传递到服务器端的参数
+                1.字符串： “key=value&key=value"
+                2.JS对象
+                    {
+                    key：“value”
+                    key：”value“
+                    }
+            4. dataType 字符串 响应回来的数据的格式
+                1. html
+                2. text
+                3. json
+                4. jsonp  跨域使用
+
+            5   async 布尔类型 是否采用异步方式发送请求
+                true ： 异步
+                false ： 同步
+
+            6. success 回调函数 请求和响应成功时的回调函数
+                function（resText）{
+                resText; 表示响应回来的数据
+                }
+
+            7. error 回调函数   请求或响应失败时的回调函数
+
+            8.beforeSend 回调函数 发送请求 之间要做的操作
+                如果返回false 则终止请求的发送
+
+insert into province(pnazme) values('黑龙江'),('吉林'),('河南')
+insert into city(pid,cname) values (1,'哈尔滨'),(1,'齐齐哈尔'),(1,'大庆'),
+                                    (2,'长春'),(2,'四平'),(2,'吉林'),
+                                    (3,'沈阳'),(3,'大连'),(3,'鞍山'),
+
+2.跨域
+    1.什么是跨域
+        HTTP协议中一个策略 -- 同源策略
+        同源： 在多个地址中， 相同协议，相同域名，相同端口
+
+在HTTP中 必须是同源地址才能互相发送ajax请求  非同源地址拒绝请求（《script》和<img>除外）
+
+        http://localhost:5000/a.html
+        http://127.0.0.1:5000/server
+        以上地址非同源
+
+2.解决同源策略的限制-跨域
+        使用 <script> 向远程地址发送ajax请求并接受响应回来的数据（script代码）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'

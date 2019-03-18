@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/commin.js"></script>
+    <script>
+        function btnClick(){
+                                           <!--//创建xhr-->
+            var xhr= createXhr()
+                                          <!--//创建请求get 方式 地址： /01-ajax-get-->
+           xhr.open('get','/01-ajax-get',true)
+                                         <!--设置回调函数-->
+            xhr.onreadystatechange=function(){
+                                        <!--//判断xhr。readyState以及xhr。status-->
+                if(xhr.readyState==4 && xhr.status==200){
+                                        <!--//接受响应回来的文本-->
+                var res = xhr.responseText;
+                                        <!--//将响应回来的数据显示在show元素中-->
+                document.getElementById('show').innerHTML = res
+                }
+
+            }
+            <!--发送请求-->
+            xhr.send(null)
+
+        }
+    </script>
+</head>
+<body>
+    <a href="/01-ajax-get">非AJAX请求</a>
+    <button onclick="btnClick()">AJAX请求</button>
+    <div id="show"></div>
+</body>
+</html>

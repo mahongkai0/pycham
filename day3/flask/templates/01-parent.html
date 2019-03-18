@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/03-request">点击一下</a>
+    <h1>这是01-parent.html中的头部内容</h1>
+    <h1>
+        {% block content %}
+        {{uname}}
+        这是父母版中允许被修改的内容
+        {% endblock %}
+
+    </h1>
+    <h1>这是01-parent.htl中的尾部内容</h1>
+
+
+
+</body>
+</html>
